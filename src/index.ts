@@ -2,6 +2,7 @@ import express, { type Express, type Request, type Response } from "express";
 import { json } from "body-parser";
 import { connect, getInventory, updateInventory } from "./sheet.js";
 import cors from 'cors';
+import 'dotenv/config';
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
@@ -10,6 +11,9 @@ connect();
 
 app.use(cors())
 app.use(json());
+
+app.use('/', express.static('app/dist'));
+app.use('/*', express.static('app/dist/index.html'));
 
 app.get('/inventory', async (req: Request, res: Response) => {
     console.log('get inventory');
