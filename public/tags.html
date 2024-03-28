@@ -1,0 +1,90 @@
+<html>
+    <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+        <style>
+            * {
+                font-family: 'Roboto Condensed', sans-serif;
+            }
+
+            body {
+                width: 8.5in;
+                height: 11in;
+                margin: 0.55in 0.48in;
+                padding: 0;
+            }
+
+            @page {
+                size: 8.5in 11in;
+            }
+
+            .row {
+                display: flex;
+                gap: 0.125in;
+            }
+
+            .tag {
+                width: .775in;
+                height: 1.035in;
+                border: 0.5px solid white;
+                border-radius: .125in;
+                margin: 0;
+                overflow: hidden;
+            }
+
+            .tag-title {
+                font-size: 0.125in;
+                text-align: center;
+                margin: 0;
+                font-weight: bold;
+                margin-top: 0.075in;
+            }
+
+            .tag-subtitle {
+                font-size: 0.1in;
+                text-align: center;
+                margin: 0;
+            }
+
+            .tag-phone {
+                font-size: 0.1in;
+                text-align: center;
+                margin: 0;
+                font-weight: bold;
+            }
+
+            .tag img {
+                display: block;
+                max-height: .5in;
+                margin: 0 auto;
+            }
+        </style>
+    </head>
+
+    <body>
+    </body>
+
+    <script>
+        // Generate tag elements
+        for (let row = 1; row <= 10; row++) {
+            document.write('<div class="row">');
+            for (let col = 1; col <= 9; col++) {
+                const number = (row - 1) * 9 + col + 9999 + 270;
+                const imgUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${number}Filip%20Kin%202489466028`;
+                const tagSubtitle = number.toString().padStart(5, '0');
+                document.write(`
+                    <div class="tag">
+                        <p class="tag-title">Filip Kin</p>
+                        <img src="${imgUrl}">
+                        <p class="tag-subtitle">${tagSubtitle}</p>
+                        <p class="tag-phone">248-946-6028</p>
+                    </div>
+                `);
+            }
+            document.write('</div>');
+        }
+    </script>
+</html>
+</script>
+</html>
