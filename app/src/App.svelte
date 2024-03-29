@@ -5,7 +5,7 @@
     import { itemStore, type Item } from "./stores/items";
     import { containerStore, type Container } from "./stores/containers";
 
-    fetch('https://inventory.filipkin.com/inventory').then(res => res.json()).then((data) => {
+    fetch('https://inventory.app.filipkin.com/inventory').then(res => res.json()).then((data) => {
         console.log(data);
         const localData = get(itemStore);
         const remoteData = data as unknown as Item[];
@@ -27,7 +27,7 @@
     });
 
     itemStore.subscribe((items) => {
-        fetch('https://inventory.filipkin.com/inventory', {
+        fetch('https://inventory.app.filipkin.com/inventory', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

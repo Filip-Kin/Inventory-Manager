@@ -12,9 +12,6 @@ connect();
 app.use(cors())
 app.use(json());
 
-app.use('/', express.static('app/dist'));
-app.use('/*', express.static('app/dist/index.html'));
-
 app.get('/inventory', async (req: Request, res: Response) => {
     console.log('get inventory');
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -27,6 +24,9 @@ app.post('/inventory', async (req: Request, res: Response) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.send('ok');
 });
+
+app.use('/', express.static('app/dist'));
+app.use('/*', express.static('app/dist/index.html'));
 
 app.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`);
