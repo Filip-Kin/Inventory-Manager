@@ -87,9 +87,13 @@
                 let barcodes = await barcodeDetector.detect(canvas);
 
                 if (barcodes.length > 0) {
+
+                    navigator.vibrate(200);
+
                     let barcodeData = barcodes[0].rawValue;
+                    console.log(barcodeData);
                     tag = barcodeData.substring(0, 5);
-                    scanCode(new Event("submit"));
+                    await scanCode(new Event("submit"));
                 }
 
                 requestAnimationFrame(checkForQrCode);
