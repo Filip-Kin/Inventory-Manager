@@ -93,7 +93,8 @@
                     let barcodeData = barcodes[0].rawValue;
                     console.log(barcodeData);
                     tag = barcodeData.substring(0, 5);
-                    await scanCode(new Event("submit"));
+                    scanCode(new Event("submit"));
+                    await new Promise((resolve) => setTimeout(resolve, 500));
                 }
 
                 requestAnimationFrame(checkForQrCode);
