@@ -25,18 +25,6 @@
         itemStore.set(newData);
         console.log('Items updated from server');
     });
-
-    itemStore.subscribe((items) => {
-        fetch('https://inventory.app.filipkin.com/inventory', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(items)
-        }).then(res => res.text()).then((data) => {
-            console.log('Items updated on server');
-        });
-    });
 </script>
 
 <main>

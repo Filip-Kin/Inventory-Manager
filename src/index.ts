@@ -1,6 +1,6 @@
 import express, { type Express, type Request, type Response } from "express";
 import { json } from "body-parser";
-import { connect, getInventory, updateInventory } from "./sheet.js";
+import { checkin, checkout, connect, create, getInventory, updateInventory } from "./sheet.js";
 import cors from 'cors';
 import 'dotenv/config';
 
@@ -18,11 +18,32 @@ app.get('/inventory', async (req: Request, res: Response) => {
     res.send(await getInventory());
 });
 
-app.post('/inventory', async (req: Request, res: Response) => {
-    console.log('post inventory');
-    updateInventory(req.body);
+app.post('/checkin/:tag', async (req: Request, res: Response) => {
+    console.log('checkin');
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.send('ok');
+    await checkin(req.params.tag);
+    res.send();
+});
+
+app.post('/checkout/:tag', async (req: Request, res: Response) => {
+    console.log('checkout');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    await checkout(req.params.tag);
+    res.send();
+});
+
+app.post('/create/:tag', async (req: Request, res: Response) => {
+    console.log('create');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    await create(req.params.tag, req.body.make, req.body.model, req.body.description, req.body.value, req.body.serial, req.body.container, req.body.checkedOut, req.body.isContainer);
+    res.send();
+});
+
+app.post('/move/:tag', async (req: Request, res: Response) => {
+    console.log('move');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    await updateInventory(req.params.tag, req.body.container);
+    res.send();
 });
 
 app.use('/', express.static('app/dist'));

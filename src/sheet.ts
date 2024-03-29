@@ -59,51 +59,55 @@ export async function getInventory() {
     }
 }
 
-let currentlyUpdateing = false
-
-export async function updateInventory(inventory: InventoryRowData[]) {
-    if (currentlyUpdateing) return;
-    currentlyUpdateing = true
+export async function checkin(tag: string) {
     await connectPromise;
-    if (!invSheet) throw new Error('Failed to connect to inventory sheet');
-    const existingRows = await invSheet.getRows<InventoryRowData>();
-    const existingRowsMap = new Map<string, GoogleSpreadsheetRow<InventoryRowData>>();
-
-    existingRows.forEach(row => existingRowsMap.set(row.get('tag'), row));
-
-    const updates: Promise<any>[] = [];
-
-    inventory.forEach(item => {
-        const existingRow = existingRowsMap.get(item.tag);
-
-        if (existingRow) {
-            if (existingRow?.get('make') !== item.make ||
-                existingRow?.get('model') !== item.model ||
-                existingRow?.get('description') !== item.description ||
-                existingRow?.get('value') !== item.value ||
-                existingRow?.get('serial') !== item.serial ||
-                existingRow?.get('container') !== item.container ||
-                (existingRow?.get('checkedOut') == true) !== item.checkedOut ||
-                (existingRow?.get('isContainer') == true) !== item.isContainer) {
-                console.log('Updating', item.tag);
-                // Update existing row
-                existingRow.set('make', item.make);
-                existingRow.set('model', item.model);
-                existingRow.set('description', item.description);
-                existingRow.set('value', item.value);
-                existingRow.set('serial', item.serial);
-                existingRow.set('container', item.container);
-                existingRow.set('checkedOut', item.checkedOut);
-                existingRow.set('isContainer', item.isContainer);
-                updates.push(existingRow.save());
-            }
-        } else {
-            // Create new row
-            let promise = invSheet?.addRow(item);
-            if (promise) updates.push(promise);
+    if (invSheet) {
+        const rows = await invSheet.getRows<InventoryRowData>();
+        const row = rows.find(row => row.get('tag') == tag);
+        if (row) {
+            row.set('checkedOut', false);
+            row.save();
         }
-    });
+    }
+}
 
-    await Promise.all(updates);
-    currentlyUpdateing = false;
+export async function checkout(tag: string) {
+    await connectPromise;
+    if (invSheet) {
+        const rows = await invSheet.getRows<InventoryRowData>();
+        const row = rows.find(row => row.get('tag') == tag);
+        if (row) {
+            row.set('checkedOut', true);
+            row.save();
+        }
+    }
+}
+
+export async function create(tag: string, make: string, model: string, description: string, value: number, serial: string, container: string, checkedOut: boolean, isContainer: boolean) {
+    await connectPromise;
+    if (invSheet) {
+        await invSheet.addRow({
+            tag,
+            make,
+            model,
+            description,
+            value,
+            serial,
+            container,
+            checkedOut,
+            isContainer
+        });
+    }
+}
+
+export async function move(tag: string, container: string) {
+    await connectPromise;
+    if (invSheet) {
+        const rows = await invSheet.getRows<InventoryRowData>();
+        const row = rows.find(row => row.get('tag') == tag);
+        if (row) {
+            row.set('container', container);
+            row.save();
+        }
+    }
 }

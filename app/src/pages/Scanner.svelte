@@ -138,6 +138,14 @@
             containerStore.set(containers);
         }
 
+        await fetch('https://inventory.app.filipkin.com/create/'+itemToCreate.tag, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(itemToCreate)
+        });
+
         createItemModal = false;
         disableInputs = false;
 
@@ -168,6 +176,9 @@
                 item.checkedOut = false;
                 items = items;
                 itemStore.set(items);
+                await fetch('https://inventory.app.filipkin.com/checkin/'+tag, {
+                    method: 'POST'
+                });
             }
             disableInputs = false;
         } else if (mode === 'checkout') {
@@ -176,6 +187,9 @@
                 item.checkedOut = true;
                 items = items;
                 itemStore.set(items);
+                await fetch('https://inventory.app.filipkin.com/checkout/'+tag, {
+                    method: 'POST'
+                });
             }
             disableInputs = false;
         } else if (mode === 'edit') {
@@ -199,6 +213,15 @@
             item.checkedOut = !item.checkedOut;
             items = items;
             itemStore.set(items);
+            if (item.checkedOut) {
+                await fetch('https://inventory.app.filipkin.com/checkout/'+tag, {
+                    method: 'POST'
+                });
+            } else {
+                await fetch('https://inventory.app.filipkin.com/checkin/'+tag, {
+                    method: 'POST'
+                });
+            }
         }
     }
 </script>
