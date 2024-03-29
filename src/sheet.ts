@@ -44,6 +44,7 @@ export async function getInventory() {
     await connectPromise;
     if (invSheet) {
         const rows = await invSheet.getRows<InventoryRowData>();
+        console.log(rows[0].get('isContainer'));
         return rows.map(row => ({
             tag: row.get('tag'),
             make: row.get('make'),
@@ -52,8 +53,8 @@ export async function getInventory() {
             value: row.get('value'),
             serial: row.get('serial'),
             container: row.get('container'),
-            checkedOut: row.get('checkedOut').toString().toLowercase() == "true",
-            isContainer: row.get('isContainer').toString().toLowercase() == "true"
+            checkedOut: row.get('checkedOut') == "true",
+            isContainer: `${row.get('isContainer')}` == "true"
         }));
     }
 }
