@@ -53,8 +53,8 @@ export async function getInventory() {
             value: row.get('value'),
             serial: row.get('serial'),
             container: row.get('container'),
-            checkedOut: row.get('checkedOut') == "true",
-            isContainer: `${row.get('isContainer')}` == "true"
+            checkedOut: `${row.get('checkedOut')}` == "TRUE",
+            isContainer: `${row.get('isContainer')}` == "TRUE"
         }));
     }
 }
