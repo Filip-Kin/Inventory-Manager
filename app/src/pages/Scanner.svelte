@@ -88,10 +88,8 @@
 
                 if (barcodes.length > 0) {
                     let barcodeData = barcodes[0].rawValue;
-                    alert(
-                        "Detected QR code with the following content: " +
-                            barcodeData,
-                    );
+                    tag = barcodeData.substring(0, 5);
+                    scanCode(new Event("submit"));
                 }
 
                 requestAnimationFrame(checkForQrCode);
