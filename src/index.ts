@@ -1,6 +1,6 @@
 import express, { type Express, type Request, type Response } from "express";
 import { json } from "body-parser";
-import { checkin, checkout, connect, create, getInventory, updateInventory } from "./sheet.js";
+import { checkin, checkout, connect, create, getInventory, move } from "./sheet.js";
 import cors from 'cors';
 import 'dotenv/config';
 
@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 
 connect();
 
-app.use(cors())
+app.use(cors());
 app.use(json());
 
 app.get('/inventory', async (req: Request, res: Response) => {
@@ -42,7 +42,7 @@ app.post('/create/:tag', async (req: Request, res: Response) => {
 app.post('/move/:tag', async (req: Request, res: Response) => {
     console.log('move');
     res.setHeader('Access-Control-Allow-Origin', '*');
-    await updateInventory(req.params.tag, req.body.container);
+    await move(req.params.tag, req.body.container);
     res.send();
 });
 
