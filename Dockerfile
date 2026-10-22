@@ -3,6 +3,8 @@
 # Mirrors the old nixpacks plan: npm ci -> bun run build -> bun run start (tsx on Node).
 FROM node:22-slim
 COPY --from=oven/bun:1 /usr/local/bin/bun /usr/local/bin/bun
+# curl for Coolify's container healthcheck
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 ENV CI=true NPM_CONFIG_PRODUCTION=false
 COPY . .
